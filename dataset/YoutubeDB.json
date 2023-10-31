@@ -1,0 +1,56 @@
+{
+	"name": "YoutubeDB",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "DL_EngDadosMatheus",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Transformation_YoutubersDB"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "most_subscribed_youtube_channels.csv",
+				"folderPath": "RAW",
+				"fileSystem": "disco1"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "rank",
+				"type": "String"
+			},
+			{
+				"name": "Youtuber",
+				"type": "String"
+			},
+			{
+				"name": "subscribers",
+				"type": "String"
+			},
+			{
+				"name": "video views",
+				"type": "String"
+			},
+			{
+				"name": "video count",
+				"type": "String"
+			},
+			{
+				"name": "category",
+				"type": "String"
+			},
+			{
+				"name": "started",
+				"type": "String"
+			}
+		]
+	}
+}
