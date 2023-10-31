@@ -15,7 +15,15 @@
 					"name": "OrigemYoutubers"
 				}
 			],
-			"sinks": [],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "YoutubeDB",
+						"type": "DatasetReference"
+					},
+					"name": "YoutubesLoad"
+				}
+			],
 			"transformations": [
 				{
 					"name": "TransformaTipoCol"
@@ -24,7 +32,7 @@
 					"name": "RenomeiaPortugues"
 				},
 				{
-					"name": "filter1"
+					"name": "FiltroAno2014"
 				}
 			],
 			"scriptLines": [
@@ -59,7 +67,25 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> RenomeiaPortugues",
-				"RenomeiaPortugues filter(AnoDeCriacao < 2014) ~> filter1"
+				"RenomeiaPortugues filter(AnoDeCriacao < 2014) ~> FiltroAno2014",
+				"FiltroAno2014 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          rank as string,",
+				"          Youtuber as string,",
+				"          subscribers as string,",
+				"          {video views} as string,",
+				"          {video count} as string,",
+				"          category as string,",
+				"          started as string",
+				"     ),",
+				"     partitionFileNames:['YoutubersDB_Final'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> YoutubesLoad"
 			]
 		}
 	}
