@@ -1,0 +1,66 @@
+{
+	"name": "DF_Youtubers",
+	"properties": {
+		"folder": {
+			"name": "DF_Youtubers"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "YoutubeDB",
+						"type": "DatasetReference"
+					},
+					"name": "OrigemYoutubers"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "TransformaTipoCol"
+				},
+				{
+					"name": "RenomeiaPortugues"
+				},
+				{
+					"name": "filter1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          rank as string,",
+				"          Youtuber as string,",
+				"          subscribers as string,",
+				"          {video views} as string,",
+				"          {video count} as string,",
+				"          category as string,",
+				"          started as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> OrigemYoutubers",
+				"OrigemYoutubers cast(output(",
+				"          rank as integer '000',",
+				"          subscribers as integer '###,###',",
+				"          {video views} as long '###,###,###,###',",
+				"          {video count} as integer '###,###',",
+				"          started as integer '000'",
+				"     ),",
+				"     errors: true) ~> TransformaTipoCol",
+				"TransformaTipoCol select(mapColumn(",
+				"          Ranking = rank,",
+				"          Youtuber,",
+				"          Inscritos = subscribers,",
+				"          {Visualizações} = {video views},",
+				"          Videos = {video count},",
+				"          Categoria = category,",
+				"          AnoDeCriacao = started",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> RenomeiaPortugues",
+				"RenomeiaPortugues filter(AnoDeCriacao < 2014) ~> filter1"
+			]
+		}
+	}
+}
