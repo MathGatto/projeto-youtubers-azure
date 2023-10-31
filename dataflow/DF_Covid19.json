@@ -1,0 +1,79 @@
+{
+	"name": "DF_Covid19",
+	"properties": {
+		"description": "ETL em uma base de dados dos casos de covid 19",
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "covid19_data",
+						"type": "DatasetReference"
+					},
+					"name": "Origem"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "covid19_data",
+						"type": "DatasetReference"
+					},
+					"name": "Covid19export"
+				}
+			],
+			"transformations": [],
+			"scriptLines": [
+				"source(output(",
+				"          id as integer,",
+				"          updated as date,",
+				"          confirmed as integer,",
+				"          confirmed_change as integer,",
+				"          deaths as integer,",
+				"          deaths_change as short,",
+				"          recovered as integer,",
+				"          recovered_change as integer,",
+				"          latitude as double,",
+				"          longitude as double,",
+				"          iso2 as string,",
+				"          iso3 as string,",
+				"          country_region as string,",
+				"          admin_region_1 as string,",
+				"          iso_subdivision as string,",
+				"          admin_region_2 as string,",
+				"          load_time as timestamp",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> Origem",
+				"Origem sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          id as string,",
+				"          updated as string,",
+				"          confirmed as string,",
+				"          confirmed_change as string,",
+				"          deaths as string,",
+				"          deaths_change as string,",
+				"          recovered as string,",
+				"          recovered_change as string,",
+				"          latitude as string,",
+				"          longitude as string,",
+				"          iso2 as string,",
+				"          iso3 as string,",
+				"          country_region as string,",
+				"          admin_region_1 as string,",
+				"          iso_subdivision as string,",
+				"          admin_region_2 as string,",
+				"          load_time as string",
+				"     ),",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     saveOrder: 1) ~> Covid19export"
+			]
+		}
+	}
+}

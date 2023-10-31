@@ -1,0 +1,9 @@
+{
+	"name": "adfMatheusengdados",
+	"location": "brazilsouth",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "07bc4a69-63b1-48e7-be2e-db76afc0df27",
+		"tenantId": "a1f255a8-4ec4-4756-be49-7474e9331089"
+	}
+}
