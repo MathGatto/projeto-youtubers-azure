@@ -18,7 +18,7 @@
 			"sinks": [
 				{
 					"dataset": {
-						"referenceName": "YoutubeDB",
+						"referenceName": "YoutuberDB_Final",
 						"type": "DatasetReference"
 					},
 					"name": "YoutubesLoad"
@@ -70,15 +70,6 @@
 				"RenomeiaPortugues filter(AnoDeCriacao < 2014) ~> FiltroAno2014",
 				"FiltroAno2014 sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
-				"     input(",
-				"          rank as string,",
-				"          Youtuber as string,",
-				"          subscribers as string,",
-				"          {video views} as string,",
-				"          {video count} as string,",
-				"          category as string,",
-				"          started as string",
-				"     ),",
 				"     partitionFileNames:['YoutubersDB_Final'],",
 				"     umask: 0022,",
 				"     preCommands: [],",
