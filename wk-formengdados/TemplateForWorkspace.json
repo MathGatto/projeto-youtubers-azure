@@ -1,0 +1,886 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"workspaceName": {
+			"type": "string",
+			"metadata": "Nome do Workspace",
+			"defaultValue": "wk-formengdados"
+		},
+		"wk-formengdados-WorkspaceDefaultSqlServer_connectionString": {
+			"type": "secureString",
+			"metadata": "Cadeia de caracteres segura para 'connectionString' de 'wk-formengdados-WorkspaceDefaultSqlServer'",
+			"defaultValue": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=tcp:wk-formengdados.sql.azuresynapse.net,1433;Initial Catalog=@{linkedService().DBName}"
+		},
+		"wk-formengdados-WorkspaceDefaultStorage_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://storageaccengdadosazure.dfs.core.windows.net"
+		}
+	},
+	"variables": {
+		"workspaceId": "[concat('Microsoft.Synapse/workspaces/', parameters('workspaceName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('workspaceName'), '/PBIWorkspace1')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "PowerBIWorkspace",
+				"typeProperties": {
+					"workspaceID": "PBIWorkspace",
+					"tenantID": "a1f255a8-4ec4-4756-be49-7474e9331089"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/wk-formengdados-WorkspaceDefaultSqlServer')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"parameters": {
+					"DBName": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"type": "AzureSqlDW",
+				"typeProperties": {
+					"connectionString": "[parameters('wk-formengdados-WorkspaceDefaultSqlServer_connectionString')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/wk-formengdados-WorkspaceDefaultStorage')]",
+			"type": "Microsoft.Synapse/workspaces/linkedServices",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('wk-formengdados-WorkspaceDefaultStorage_properties_typeProperties_url')]"
+				},
+				"connectVia": {
+					"referenceName": "AutoResolveIntegrationRuntime",
+					"type": "IntegrationRuntimeReference"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('workspaceId'), '/integrationRuntimes/AutoResolveIntegrationRuntime')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/AutoResolveIntegrationRuntime')]",
+			"type": "Microsoft.Synapse/workspaces/integrationRuntimes",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"type": "Managed",
+				"typeProperties": {
+					"computeProperties": {
+						"location": "AutoResolve",
+						"dataFlowProperties": {
+							"computeType": "General",
+							"coreCount": 8,
+							"timeToLive": 0
+						}
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/WorkspaceSystemIdentity')]",
+			"type": "Microsoft.Synapse/workspaces/credentials",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"type": "ManagedIdentity",
+				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/CreateDimEmployee')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"folder": {
+					"name": "ps_dp203"
+				},
+				"content": {
+					"query": "CREATE TABLE [dbo].[DimEmployee](\n\n[EmployeeKey] [int] NOT NULL,\n\n[ParentEmployeeKey] [int] NULL,\n\n[EmployeeNationalIDAlternateKey] [nvarchar](15) NULL,\n\n[ParentEmployeeNationalIDAlternateKey] [nvarchar](15) NULL,\n\n[SalesTerritoryKey] [int] NULL,\n\n[FirstName] [nvarchar](50) NOT NULL,\n\n[LastName] [nvarchar](50) NOT NULL,\n\n[MiddleName] [nvarchar](50) NULL,\n\n[NameStyle] [bit] NOT NULL,\n\n[Title] [nvarchar](50) NULL,\n\n[HireDate] [date] NULL,\n\n[BirthDate] [date] NULL,\n\n[LoginID] [nvarchar](256) NULL,\n\n[EmailAddress] [nvarchar](50) NULL,\n\n[Phone] [nvarchar](25) NULL,\n\n[MaritalStatus] [nchar](1) NULL,\n\n[EmergencyContactName] [nvarchar](50) NULL,\n\n[EmergencyContactPhone] [nvarchar](25) NULL,\n\n[SalariedFlag] [bit] NULL,\n\n[Gender] [nchar](1) NULL,\n\n[PayFrequency] [tinyint] NULL,\n\n[BaseRate] [money] NULL,\n\n[VacationHours] [smallint] NULL,\n\n[SickLeaveHours] [smallint] NULL,\n\n[CurrentFlag] [bit] NOT NULL,\n\n[SalesPersonFlag] [bit] NOT NULL,\n\n[DepartmentName] [nvarchar](50) NULL,\n\n[StartDate] [date] NULL,\n\n[EndDate] [date] NULL,\n\n[Status] [nvarchar](50) NULL,\n\n[EmployeePhoto] [varbinary](max) NULL\n\n)\n\nWITH\n(\nDISTRIBUTION = REPLICATE,\n\nCLUSTERED INDEX (EmployeeKey)\n);\n\nGO",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "ps_dp203",
+						"poolName": "ps_dp203"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/CreateDimJobSalaries')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"folder": {
+					"name": "ps_dp203"
+				},
+				"content": {
+					"query": "CREATE TABLE [dbo].[DimJobSalaries](\n\n[SalariesKey] [int] NOT NULL,\n\n[work_year] [int] NULL,\n\n[experience_level] [nvarchar](15) NULL,\n\n[employment_type] [nvarchar](15) NULL,\n\n[job_title] [nvarchar](50) NOT NULL,\n\n[salary] [int] NULL,\n\n[salary_currency] [nvarchar](15) NULL,\n\n[salary_in_usd] [int] NULL,\n\n[employee_residence] [nvarchar](15) NULL,\n\n[remote_ratio] [int] NULL,\n\n[company_location] [nvarchar](15) NULL,\n\n[company_size] [nvarchar](15) NULL\n\n)\n\nWITH\n(\nDISTRIBUTION = REPLICATE,\n\nCLUSTERED INDEX (SalariesKey)\n);\n\nGO",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "ps_dp203",
+						"poolName": "ps_dp203"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/InsertDimEmployee')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"folder": {
+					"name": "ps_dp203"
+				},
+				"content": {
+					"query": "COPY INTO [dbo].[DimEmployee]\n\nFROM 'https://solliancepublicdata.blob.core.windows.net/dataengineering/dp-203/awdata/DimEmployee.csv'\n\nWITH (\n\n    FILE_TYPE='CSV',\n    FIELDTERMINATOR='|',\n    FIELDQUOTE='',\n    ROWTERMINATOR='\\n',\n    ENCODING = 'UTF16'\n\n);\nGO",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "ps_dp203",
+						"poolName": "ps_dp203"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/InsertDimJobSalaries')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"folder": {
+					"name": "ps_dp203"
+				},
+				"content": {
+					"query": "COPY INTO [dbo].[DimJobSalaries]\n\nFROM 'https://ai-jobs.net/salaries/download/salaries.csv'\n\nWITH (\n\n    FILE_TYPE='CSV',\n    FIELDTERMINATOR=',',\n    FIELDQUOTE='',\n    ROWTERMINATOR='\\n',\n    ENCODING = 'UTF16'\n\n);\nGO",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "ps_dp203",
+						"poolName": "ps_dp203"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/SQL script 1')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"content": {
+					"query": "SELECT TOP (100) [EmployeeKey]\n,[ParentEmployeeKey]\n,[EmployeeNationalIDAlternateKey]\n,[ParentEmployeeNationalIDAlternateKey]\n,[SalesTerritoryKey]\n,[FirstName]\n,[LastName]\n,[MiddleName]\n,[NameStyle]\n,[Title]\n,[HireDate]\n,[BirthDate]\n,[LoginID]\n,[EmailAddress]\n,[Phone]\n,[MaritalStatus]\n,[EmergencyContactName]\n,[EmergencyContactPhone]\n,[SalariedFlag]\n,[Gender]\n,[PayFrequency]\n,[BaseRate]\n,[VacationHours]\n,[SickLeaveHours]\n,[CurrentFlag]\n,[SalesPersonFlag]\n,[DepartmentName]\n,[StartDate]\n,[EndDate]\n,[Status]\n,[EmployeePhoto]\n FROM [dbo].[DimEmployee]",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "ps_dp203",
+						"poolName": "ps_dp203"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/select_csv_ext')]",
+			"type": "Microsoft.Synapse/workspaces/sqlscripts",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"folder": {
+					"name": "Serverless Pool SQL"
+				},
+				"content": {
+					"query": "SELECT TOP 10 *\nFROM OPENROWSET(\n    BULK 'https://pandemicdatalake.blob.core.windows.net/public/curated/covid-19/ecdc_cases/latest/ecdc_cases.csv',\n    FORMAT = 'csv',\n    PARSER_VERSION = '2.0',\n    HEADER_ROW = TRUE\n    --FIRSTROW = 2\n    ) AS [r]\nWHERE [countries_and_territories] = 'Brazil' order by [deaths] DESC",
+					"metadata": {
+						"language": "sql"
+					},
+					"currentConnection": {
+						"databaseName": "master",
+						"poolName": "Built-in"
+					},
+					"resultLimit": 5000
+				},
+				"type": "SqlQuery"
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/CriarDataFrame')]",
+			"type": "Microsoft.Synapse/workspaces/notebooks",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"nbformat": 4,
+				"nbformat_minor": 2,
+				"bigDataPool": {
+					"referenceName": "paapachedp2032",
+					"type": "BigDataPoolReference"
+				},
+				"sessionProperties": {
+					"driverMemory": "28g",
+					"driverCores": 4,
+					"executorMemory": "28g",
+					"executorCores": 4,
+					"numExecutors": 2,
+					"runAsWorkspaceSystemIdentity": false,
+					"conf": {
+						"spark.dynamicAllocation.enabled": "false",
+						"spark.dynamicAllocation.minExecutors": "2",
+						"spark.dynamicAllocation.maxExecutors": "2",
+						"spark.autotune.trackingId": "96c1f28b-0fba-4225-a96b-1add78b289ba"
+					}
+				},
+				"metadata": {
+					"saveOutput": true,
+					"synapse_widget": {
+						"version": "0.1",
+						"state": {
+							"a379bc28-13b6-4a0b-be7d-8fb8814d258b": {
+								"type": "Synapse.DataFrame",
+								"sync_state": {
+									"table": {
+										"rows": [
+											{
+												"0": "2",
+												"1": "2018-05-27 17:50:34",
+												"2": "2018-05-27 17:56:41",
+												"3": "3",
+												"4": "0.82",
+												"5": "161",
+												"6": "100",
+												"11": "1",
+												"12": "N",
+												"13": "2",
+												"14": "6.0",
+												"15": "0.0",
+												"16": "0.5",
+												"17": "0.3",
+												"18": "0.0",
+												"19": "0.0",
+												"20": "6.8",
+												"21": "2018",
+												"22": "5"
+											},
+											{
+												"0": "2",
+												"1": "2018-05-23 08:20:41",
+												"2": "2018-05-23 08:37:06",
+												"3": "1",
+												"4": "1.69",
+												"5": "142",
+												"6": "162",
+												"11": "1",
+												"12": "N",
+												"13": "1",
+												"14": "11.5",
+												"15": "0.0",
+												"16": "0.5",
+												"17": "0.3",
+												"18": "3.08",
+												"19": "0.0",
+												"20": "15.38",
+												"21": "2018",
+												"22": "5"
+											},
+											{
+												"0": "2",
+												"1": "2018-05-23 09:02:54",
+												"2": "2018-05-23 09:17:59",
+												"3": "2",
+												"4": "6.64",
+												"5": "140",
+												"6": "87",
+												"11": "1",
+												"12": "N",
+												"13": "2",
+												"14": "19.5",
+												"15": "0.0",
+												"16": "0.5",
+												"17": "0.3",
+												"18": "0.0",
+												"19": "0.0",
+												"20": "20.3",
+												"21": "2018",
+												"22": "5"
+											},
+											{
+												"0": "2",
+												"1": "2018-05-23 13:28:48",
+												"2": "2018-05-23 13:35:15",
+												"3": "1",
+												"4": "0.61",
+												"5": "170",
+												"6": "234",
+												"11": "1",
+												"12": "N",
+												"13": "1",
+												"14": "6.0",
+												"15": "0.0",
+												"16": "0.5",
+												"17": "0.3",
+												"18": "1.0",
+												"19": "0.0",
+												"20": "7.8",
+												"21": "2018",
+												"22": "5"
+											},
+											{
+												"0": "2",
+												"1": "2018-05-23 07:05:50",
+												"2": "2018-05-23 07:07:40",
+												"3": "2",
+												"4": "0.48",
+												"5": "48",
+												"6": "50",
+												"11": "1",
+												"12": "N",
+												"13": "2",
+												"14": "3.5",
+												"15": "0.0",
+												"16": "0.5",
+												"17": "0.3",
+												"18": "0.0",
+												"19": "0.0",
+												"20": "4.3",
+												"21": "2018",
+												"22": "5"
+											},
+											{
+												"0": "2",
+												"1": "2018-05-23 07:31:51",
+												"2": "2018-05-23 07:44:02",
+												"3": "5",
+												"4": "1.77",
+												"5": "223",
+												"6": "129",
+												"11": "1",
+												"12": "N",
+												"13": "2",
+												"14": "10.5",
+												"15": "0.0",
+												"16": "0.5",
+												"17": "0.3",
+												"18": "0.0",
+												"19": "0.0",
+												"20": "11.3",
+												"21": "2018",
+												"22": "5"
+											},
+											{
+												"0": "2",
+												"1": "2018-05-23 10:40:00",
+												"2": "2018-05-23 11:05:51",
+												"3": "1",
+												"4": "2.3",
+												"5": "161",
+												"6": "68",
+												"11": "1",
+												"12": "N",
+												"13": "2",
+												"14": "16.5",
+												"15": "0.0",
+												"16": "0.5",
+												"17": "0.3",
+												"18": "0.0",
+												"19": "0.0",
+												"20": "17.3",
+												"21": "2018",
+												"22": "5"
+											},
+											{
+												"0": "1",
+												"1": "2018-05-06 14:25:50",
+												"2": "2018-05-06 15:18:25",
+												"3": "1",
+												"4": "12.4",
+												"5": "132",
+												"6": "188",
+												"11": "1",
+												"12": "N",
+												"13": "1",
+												"14": "45.0",
+												"15": "0.0",
+												"16": "0.5",
+												"17": "0.3",
+												"18": "9.15",
+												"19": "0.0",
+												"20": "54.95",
+												"21": "2018",
+												"22": "5"
+											},
+											{
+												"0": "2",
+												"1": "2018-05-23 07:03:16",
+												"2": "2018-05-23 07:17:22",
+												"3": "1",
+												"4": "6.6",
+												"5": "140",
+												"6": "209",
+												"11": "1",
+												"12": "N",
+												"13": "1",
+												"14": "20.0",
+												"15": "0.0",
+												"16": "0.5",
+												"17": "0.3",
+												"18": "4.16",
+												"19": "0.0",
+												"20": "24.96",
+												"21": "2018",
+												"22": "5"
+											},
+											{
+												"0": "2",
+												"1": "2018-05-06 13:56:47",
+												"2": "2018-05-06 14:01:35",
+												"3": "4",
+												"4": "0.54",
+												"5": "161",
+												"6": "162",
+												"11": "1",
+												"12": "N",
+												"13": "1",
+												"14": "5.0",
+												"15": "0.0",
+												"16": "0.5",
+												"17": "0.3",
+												"18": "1.0",
+												"19": "0.0",
+												"20": "6.8",
+												"21": "2018",
+												"22": "5"
+											}
+										],
+										"schema": [
+											{
+												"key": "0",
+												"name": "vendorID",
+												"type": "string"
+											},
+											{
+												"key": "1",
+												"name": "tpepPickupDateTime",
+												"type": "timestamp"
+											},
+											{
+												"key": "2",
+												"name": "tpepDropoffDateTime",
+												"type": "timestamp"
+											},
+											{
+												"key": "3",
+												"name": "passengerCount",
+												"type": "int"
+											},
+											{
+												"key": "4",
+												"name": "tripDistance",
+												"type": "double"
+											},
+											{
+												"key": "5",
+												"name": "puLocationId",
+												"type": "string"
+											},
+											{
+												"key": "6",
+												"name": "doLocationId",
+												"type": "string"
+											},
+											{
+												"key": "7",
+												"name": "startLon",
+												"type": "double"
+											},
+											{
+												"key": "8",
+												"name": "startLat",
+												"type": "double"
+											},
+											{
+												"key": "9",
+												"name": "endLon",
+												"type": "double"
+											},
+											{
+												"key": "10",
+												"name": "endLat",
+												"type": "double"
+											},
+											{
+												"key": "11",
+												"name": "rateCodeId",
+												"type": "int"
+											},
+											{
+												"key": "12",
+												"name": "storeAndFwdFlag",
+												"type": "string"
+											},
+											{
+												"key": "13",
+												"name": "paymentType",
+												"type": "string"
+											},
+											{
+												"key": "14",
+												"name": "fareAmount",
+												"type": "double"
+											},
+											{
+												"key": "15",
+												"name": "extra",
+												"type": "double"
+											},
+											{
+												"key": "16",
+												"name": "mtaTax",
+												"type": "double"
+											},
+											{
+												"key": "17",
+												"name": "improvementSurcharge",
+												"type": "string"
+											},
+											{
+												"key": "18",
+												"name": "tipAmount",
+												"type": "double"
+											},
+											{
+												"key": "19",
+												"name": "tollsAmount",
+												"type": "double"
+											},
+											{
+												"key": "20",
+												"name": "totalAmount",
+												"type": "double"
+											},
+											{
+												"key": "21",
+												"name": "puYear",
+												"type": "int"
+											},
+											{
+												"key": "22",
+												"name": "puMonth",
+												"type": "int"
+											}
+										],
+										"truncated": false
+									},
+									"isSummary": false,
+									"language": "scala"
+								},
+								"persist_state": {
+									"view": {
+										"type": "details",
+										"chartOptions": {
+											"chartType": "bar",
+											"aggregationType": "sum",
+											"categoryFieldKeys": [
+												"0"
+											],
+											"seriesFieldKeys": [
+												"3"
+											],
+											"isStacked": false
+										}
+									}
+								}
+							}
+						}
+					},
+					"enableDebugMode": false,
+					"kernelspec": {
+						"name": "synapse_pyspark",
+						"display_name": "Synapse PySpark"
+					},
+					"language_info": {
+						"name": "python"
+					},
+					"a365ComputeOptions": {
+						"id": "/subscriptions/626bdedd-b430-4050-ae58-4f87734569aa/resourceGroups/ASA/providers/Microsoft.Synapse/workspaces/wk-formengdados/bigDataPools/paapachedp2032",
+						"name": "paapachedp2032",
+						"type": "Spark",
+						"endpoint": "https://wk-formengdados.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/paapachedp2032",
+						"auth": {
+							"type": "AAD",
+							"authResource": "https://dev.azuresynapse.net",
+							"authHeader": null
+						},
+						"sparkVersion": "3.3",
+						"nodeCount": 3,
+						"cores": 4,
+						"memory": 28,
+						"extraHeader": null
+					},
+					"sessionKeepAliveTimeout": 30
+				},
+				"cells": [
+					{
+						"cell_type": "markdown",
+						"metadata": {
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"## Criando um DataFrame"
+						]
+					},
+					{
+						"cell_type": "code",
+						"source": [
+							"new_tuple = ('CA', 10000, 60000)\r\n",
+							"new_tuple1 = ('WA', 12450, 55000)\r\n",
+							"new_tuple2 = ('LA', 15000, 45000)\r\n",
+							"\r\n",
+							"array_linhas = [new_tuple, new_tuple1, new_tuple2]\r\n",
+							"array_colunas = ['State', 'Population', 'Salary']\r\n",
+							"\r\n",
+							"df = spark.createDataFrame(array_linhas, array_colunas)"
+						],
+						"outputs": [],
+						"execution_count": 9
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"print(new_tuple)"
+						],
+						"outputs": [],
+						"execution_count": 4
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"print(array_linhas)"
+						],
+						"outputs": [],
+						"execution_count": 8
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							}
+						},
+						"source": [
+							"df.show()"
+						],
+						"outputs": [],
+						"execution_count": 10
+					},
+					{
+						"cell_type": "code",
+						"metadata": {
+							"jupyter": {
+								"source_hidden": false,
+								"outputs_hidden": false
+							},
+							"nteract": {
+								"transient": {
+									"deleting": false
+								}
+							},
+							"collapsed": false
+						},
+						"source": [
+							"from azureml.opendatasets import NycTlcYellow\r\n",
+							"\r\n",
+							"from datetime import datetime\r\n",
+							"from dateutil import parser\r\n",
+							"\r\n",
+							"end_date = parser.parse('2018-06-06')\r\n",
+							"start_date = parser.parse('2018-05-01')\r\n",
+							"nyc_tlc = NycTlcYellow(start_date=start_date, end_date=end_date)\r\n",
+							"nyc_tlc_df = nyc_tlc.to_spark_dataframe()\r\n",
+							"\r\n",
+							"# Display top 5 rows\r\n",
+							"display(nyc_tlc_df.limit(10))\r\n",
+							""
+						],
+						"outputs": [],
+						"execution_count": 15
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/ImportDataFrame')]",
+			"type": "Microsoft.Synapse/workspaces/notebooks",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"nbformat": 4,
+				"nbformat_minor": 2,
+				"bigDataPool": {
+					"referenceName": "paapachedp2032",
+					"type": "BigDataPoolReference"
+				},
+				"sessionProperties": {
+					"driverMemory": "28g",
+					"driverCores": 4,
+					"executorMemory": "28g",
+					"executorCores": 4,
+					"numExecutors": 2,
+					"runAsWorkspaceSystemIdentity": false,
+					"conf": {
+						"spark.dynamicAllocation.enabled": "false",
+						"spark.dynamicAllocation.minExecutors": "2",
+						"spark.dynamicAllocation.maxExecutors": "2",
+						"spark.autotune.trackingId": "b88b2100-df66-4c50-a9fa-f9dc453deab2"
+					}
+				},
+				"metadata": {
+					"saveOutput": true,
+					"synapse_widget": {
+						"version": "0.1"
+					},
+					"enableDebugMode": false,
+					"kernelspec": {
+						"name": "synapse_pyspark",
+						"display_name": "Synapse PySpark"
+					},
+					"language_info": {
+						"name": "python"
+					},
+					"a365ComputeOptions": {
+						"id": "/subscriptions/626bdedd-b430-4050-ae58-4f87734569aa/resourceGroups/ASA/providers/Microsoft.Synapse/workspaces/wk-formengdados/bigDataPools/paapachedp2032",
+						"name": "paapachedp2032",
+						"type": "Spark",
+						"endpoint": "https://wk-formengdados.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/paapachedp2032",
+						"auth": {
+							"type": "AAD",
+							"authResource": "https://dev.azuresynapse.net",
+							"authHeader": null
+						},
+						"sparkVersion": "3.3",
+						"nodeCount": 3,
+						"cores": 4,
+						"memory": 28,
+						"extraHeader": null
+					},
+					"sessionKeepAliveTimeout": 30
+				},
+				"cells": [
+					{
+						"cell_type": "code",
+						"source": [
+							""
+						],
+						"outputs": []
+					}
+				]
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/paapachedp2032')]",
+			"type": "Microsoft.Synapse/workspaces/bigDataPools",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"autoPause": {
+					"enabled": true,
+					"delayInMinutes": 10
+				},
+				"autoScale": {
+					"enabled": true,
+					"maxNodeCount": 3,
+					"minNodeCount": 3
+				},
+				"nodeCount": 0,
+				"nodeSize": "Small",
+				"nodeSizeFamily": "MemoryOptimized",
+				"sparkVersion": "3.3",
+				"isComputeIsolationEnabled": false,
+				"sessionLevelPackagesEnabled": true,
+				"annotations": []
+			},
+			"dependsOn": [],
+			"location": "brazilsouth"
+		},
+		{
+			"name": "[concat(parameters('workspaceName'), '/ps_dp203')]",
+			"type": "Microsoft.Synapse/workspaces/sqlPools",
+			"apiVersion": "2019-06-01-preview",
+			"properties": {
+				"collation": "SQL_Latin1_General_CP1_CI_AS",
+				"maxSizeBytes": 263882790666240,
+				"annotations": []
+			},
+			"dependsOn": [],
+			"location": "brazilsouth"
+		}
+	]
+}
