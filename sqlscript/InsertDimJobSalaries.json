@@ -1,0 +1,20 @@
+{
+	"name": "InsertDimJobSalaries",
+	"properties": {
+		"folder": {
+			"name": "ps_dp203"
+		},
+		"content": {
+			"query": "COPY INTO [dbo].[DimJobSalaries]\n\nFROM 'https://ai-jobs.net/salaries/download/salaries.csv'\n\nWITH (\n\n    FILE_TYPE='CSV',\n    FIELDTERMINATOR=',',\n    FIELDQUOTE='',\n    ROWTERMINATOR='\\n',\n    ENCODING = 'UTF16'\n\n);\nGO",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "ps_dp203",
+				"poolName": "ps_dp203"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

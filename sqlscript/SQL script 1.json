@@ -1,0 +1,17 @@
+{
+	"name": "SQL script 1",
+	"properties": {
+		"content": {
+			"query": "SELECT TOP (100) [EmployeeKey]\n,[ParentEmployeeKey]\n,[EmployeeNationalIDAlternateKey]\n,[ParentEmployeeNationalIDAlternateKey]\n,[SalesTerritoryKey]\n,[FirstName]\n,[LastName]\n,[MiddleName]\n,[NameStyle]\n,[Title]\n,[HireDate]\n,[BirthDate]\n,[LoginID]\n,[EmailAddress]\n,[Phone]\n,[MaritalStatus]\n,[EmergencyContactName]\n,[EmergencyContactPhone]\n,[SalariedFlag]\n,[Gender]\n,[PayFrequency]\n,[BaseRate]\n,[VacationHours]\n,[SickLeaveHours]\n,[CurrentFlag]\n,[SalesPersonFlag]\n,[DepartmentName]\n,[StartDate]\n,[EndDate]\n,[Status]\n,[EmployeePhoto]\n FROM [dbo].[DimEmployee]",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "ps_dp203",
+				"poolName": "ps_dp203"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

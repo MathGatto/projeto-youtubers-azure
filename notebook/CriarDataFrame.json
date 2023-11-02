@@ -1,0 +1,527 @@
+{
+	"name": "CriarDataFrame",
+	"properties": {
+		"nbformat": 4,
+		"nbformat_minor": 2,
+		"bigDataPool": {
+			"referenceName": "paapachedp2032",
+			"type": "BigDataPoolReference"
+		},
+		"sessionProperties": {
+			"driverMemory": "28g",
+			"driverCores": 4,
+			"executorMemory": "28g",
+			"executorCores": 4,
+			"numExecutors": 2,
+			"runAsWorkspaceSystemIdentity": false,
+			"conf": {
+				"spark.dynamicAllocation.enabled": "false",
+				"spark.dynamicAllocation.minExecutors": "2",
+				"spark.dynamicAllocation.maxExecutors": "2",
+				"spark.autotune.trackingId": "96c1f28b-0fba-4225-a96b-1add78b289ba"
+			}
+		},
+		"metadata": {
+			"saveOutput": true,
+			"synapse_widget": {
+				"version": "0.1",
+				"state": {
+					"a379bc28-13b6-4a0b-be7d-8fb8814d258b": {
+						"type": "Synapse.DataFrame",
+						"sync_state": {
+							"table": {
+								"rows": [
+									{
+										"0": "2",
+										"1": "2018-05-27 17:50:34",
+										"2": "2018-05-27 17:56:41",
+										"3": "3",
+										"4": "0.82",
+										"5": "161",
+										"6": "100",
+										"11": "1",
+										"12": "N",
+										"13": "2",
+										"14": "6.0",
+										"15": "0.0",
+										"16": "0.5",
+										"17": "0.3",
+										"18": "0.0",
+										"19": "0.0",
+										"20": "6.8",
+										"21": "2018",
+										"22": "5"
+									},
+									{
+										"0": "2",
+										"1": "2018-05-23 08:20:41",
+										"2": "2018-05-23 08:37:06",
+										"3": "1",
+										"4": "1.69",
+										"5": "142",
+										"6": "162",
+										"11": "1",
+										"12": "N",
+										"13": "1",
+										"14": "11.5",
+										"15": "0.0",
+										"16": "0.5",
+										"17": "0.3",
+										"18": "3.08",
+										"19": "0.0",
+										"20": "15.38",
+										"21": "2018",
+										"22": "5"
+									},
+									{
+										"0": "2",
+										"1": "2018-05-23 09:02:54",
+										"2": "2018-05-23 09:17:59",
+										"3": "2",
+										"4": "6.64",
+										"5": "140",
+										"6": "87",
+										"11": "1",
+										"12": "N",
+										"13": "2",
+										"14": "19.5",
+										"15": "0.0",
+										"16": "0.5",
+										"17": "0.3",
+										"18": "0.0",
+										"19": "0.0",
+										"20": "20.3",
+										"21": "2018",
+										"22": "5"
+									},
+									{
+										"0": "2",
+										"1": "2018-05-23 13:28:48",
+										"2": "2018-05-23 13:35:15",
+										"3": "1",
+										"4": "0.61",
+										"5": "170",
+										"6": "234",
+										"11": "1",
+										"12": "N",
+										"13": "1",
+										"14": "6.0",
+										"15": "0.0",
+										"16": "0.5",
+										"17": "0.3",
+										"18": "1.0",
+										"19": "0.0",
+										"20": "7.8",
+										"21": "2018",
+										"22": "5"
+									},
+									{
+										"0": "2",
+										"1": "2018-05-23 07:05:50",
+										"2": "2018-05-23 07:07:40",
+										"3": "2",
+										"4": "0.48",
+										"5": "48",
+										"6": "50",
+										"11": "1",
+										"12": "N",
+										"13": "2",
+										"14": "3.5",
+										"15": "0.0",
+										"16": "0.5",
+										"17": "0.3",
+										"18": "0.0",
+										"19": "0.0",
+										"20": "4.3",
+										"21": "2018",
+										"22": "5"
+									},
+									{
+										"0": "2",
+										"1": "2018-05-23 07:31:51",
+										"2": "2018-05-23 07:44:02",
+										"3": "5",
+										"4": "1.77",
+										"5": "223",
+										"6": "129",
+										"11": "1",
+										"12": "N",
+										"13": "2",
+										"14": "10.5",
+										"15": "0.0",
+										"16": "0.5",
+										"17": "0.3",
+										"18": "0.0",
+										"19": "0.0",
+										"20": "11.3",
+										"21": "2018",
+										"22": "5"
+									},
+									{
+										"0": "2",
+										"1": "2018-05-23 10:40:00",
+										"2": "2018-05-23 11:05:51",
+										"3": "1",
+										"4": "2.3",
+										"5": "161",
+										"6": "68",
+										"11": "1",
+										"12": "N",
+										"13": "2",
+										"14": "16.5",
+										"15": "0.0",
+										"16": "0.5",
+										"17": "0.3",
+										"18": "0.0",
+										"19": "0.0",
+										"20": "17.3",
+										"21": "2018",
+										"22": "5"
+									},
+									{
+										"0": "1",
+										"1": "2018-05-06 14:25:50",
+										"2": "2018-05-06 15:18:25",
+										"3": "1",
+										"4": "12.4",
+										"5": "132",
+										"6": "188",
+										"11": "1",
+										"12": "N",
+										"13": "1",
+										"14": "45.0",
+										"15": "0.0",
+										"16": "0.5",
+										"17": "0.3",
+										"18": "9.15",
+										"19": "0.0",
+										"20": "54.95",
+										"21": "2018",
+										"22": "5"
+									},
+									{
+										"0": "2",
+										"1": "2018-05-23 07:03:16",
+										"2": "2018-05-23 07:17:22",
+										"3": "1",
+										"4": "6.6",
+										"5": "140",
+										"6": "209",
+										"11": "1",
+										"12": "N",
+										"13": "1",
+										"14": "20.0",
+										"15": "0.0",
+										"16": "0.5",
+										"17": "0.3",
+										"18": "4.16",
+										"19": "0.0",
+										"20": "24.96",
+										"21": "2018",
+										"22": "5"
+									},
+									{
+										"0": "2",
+										"1": "2018-05-06 13:56:47",
+										"2": "2018-05-06 14:01:35",
+										"3": "4",
+										"4": "0.54",
+										"5": "161",
+										"6": "162",
+										"11": "1",
+										"12": "N",
+										"13": "1",
+										"14": "5.0",
+										"15": "0.0",
+										"16": "0.5",
+										"17": "0.3",
+										"18": "1.0",
+										"19": "0.0",
+										"20": "6.8",
+										"21": "2018",
+										"22": "5"
+									}
+								],
+								"schema": [
+									{
+										"key": "0",
+										"name": "vendorID",
+										"type": "string"
+									},
+									{
+										"key": "1",
+										"name": "tpepPickupDateTime",
+										"type": "timestamp"
+									},
+									{
+										"key": "2",
+										"name": "tpepDropoffDateTime",
+										"type": "timestamp"
+									},
+									{
+										"key": "3",
+										"name": "passengerCount",
+										"type": "int"
+									},
+									{
+										"key": "4",
+										"name": "tripDistance",
+										"type": "double"
+									},
+									{
+										"key": "5",
+										"name": "puLocationId",
+										"type": "string"
+									},
+									{
+										"key": "6",
+										"name": "doLocationId",
+										"type": "string"
+									},
+									{
+										"key": "7",
+										"name": "startLon",
+										"type": "double"
+									},
+									{
+										"key": "8",
+										"name": "startLat",
+										"type": "double"
+									},
+									{
+										"key": "9",
+										"name": "endLon",
+										"type": "double"
+									},
+									{
+										"key": "10",
+										"name": "endLat",
+										"type": "double"
+									},
+									{
+										"key": "11",
+										"name": "rateCodeId",
+										"type": "int"
+									},
+									{
+										"key": "12",
+										"name": "storeAndFwdFlag",
+										"type": "string"
+									},
+									{
+										"key": "13",
+										"name": "paymentType",
+										"type": "string"
+									},
+									{
+										"key": "14",
+										"name": "fareAmount",
+										"type": "double"
+									},
+									{
+										"key": "15",
+										"name": "extra",
+										"type": "double"
+									},
+									{
+										"key": "16",
+										"name": "mtaTax",
+										"type": "double"
+									},
+									{
+										"key": "17",
+										"name": "improvementSurcharge",
+										"type": "string"
+									},
+									{
+										"key": "18",
+										"name": "tipAmount",
+										"type": "double"
+									},
+									{
+										"key": "19",
+										"name": "tollsAmount",
+										"type": "double"
+									},
+									{
+										"key": "20",
+										"name": "totalAmount",
+										"type": "double"
+									},
+									{
+										"key": "21",
+										"name": "puYear",
+										"type": "int"
+									},
+									{
+										"key": "22",
+										"name": "puMonth",
+										"type": "int"
+									}
+								],
+								"truncated": false
+							},
+							"isSummary": false,
+							"language": "scala"
+						},
+						"persist_state": {
+							"view": {
+								"type": "details",
+								"chartOptions": {
+									"chartType": "bar",
+									"aggregationType": "sum",
+									"categoryFieldKeys": [
+										"0"
+									],
+									"seriesFieldKeys": [
+										"3"
+									],
+									"isStacked": false
+								}
+							}
+						}
+					}
+				}
+			},
+			"enableDebugMode": false,
+			"kernelspec": {
+				"name": "synapse_pyspark",
+				"display_name": "Synapse PySpark"
+			},
+			"language_info": {
+				"name": "python"
+			},
+			"a365ComputeOptions": {
+				"id": "/subscriptions/626bdedd-b430-4050-ae58-4f87734569aa/resourceGroups/ASA/providers/Microsoft.Synapse/workspaces/wk-formengdados/bigDataPools/paapachedp2032",
+				"name": "paapachedp2032",
+				"type": "Spark",
+				"endpoint": "https://wk-formengdados.dev.azuresynapse.net/livyApi/versions/2019-11-01-preview/sparkPools/paapachedp2032",
+				"auth": {
+					"type": "AAD",
+					"authResource": "https://dev.azuresynapse.net",
+					"authHeader": null
+				},
+				"sparkVersion": "3.3",
+				"nodeCount": 3,
+				"cores": 4,
+				"memory": 28,
+				"extraHeader": null
+			},
+			"sessionKeepAliveTimeout": 30
+		},
+		"cells": [
+			{
+				"cell_type": "markdown",
+				"metadata": {
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"## Criando um DataFrame"
+				]
+			},
+			{
+				"cell_type": "code",
+				"source": [
+					"new_tuple = ('CA', 10000, 60000)\r\n",
+					"new_tuple1 = ('WA', 12450, 55000)\r\n",
+					"new_tuple2 = ('LA', 15000, 45000)\r\n",
+					"\r\n",
+					"array_linhas = [new_tuple, new_tuple1, new_tuple2]\r\n",
+					"array_colunas = ['State', 'Population', 'Salary']\r\n",
+					"\r\n",
+					"df = spark.createDataFrame(array_linhas, array_colunas)"
+				],
+				"execution_count": 9
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"print(new_tuple)"
+				],
+				"execution_count": 4
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"print(array_linhas)"
+				],
+				"execution_count": 8
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					}
+				},
+				"source": [
+					"df.show()"
+				],
+				"execution_count": 10
+			},
+			{
+				"cell_type": "code",
+				"metadata": {
+					"jupyter": {
+						"source_hidden": false,
+						"outputs_hidden": false
+					},
+					"nteract": {
+						"transient": {
+							"deleting": false
+						}
+					},
+					"collapsed": false
+				},
+				"source": [
+					"from azureml.opendatasets import NycTlcYellow\r\n",
+					"\r\n",
+					"from datetime import datetime\r\n",
+					"from dateutil import parser\r\n",
+					"\r\n",
+					"end_date = parser.parse('2018-06-06')\r\n",
+					"start_date = parser.parse('2018-05-01')\r\n",
+					"nyc_tlc = NycTlcYellow(start_date=start_date, end_date=end_date)\r\n",
+					"nyc_tlc_df = nyc_tlc.to_spark_dataframe()\r\n",
+					"\r\n",
+					"# Display top 5 rows\r\n",
+					"display(nyc_tlc_df.limit(10))\r\n",
+					""
+				],
+				"execution_count": 15
+			}
+		]
+	}
+}

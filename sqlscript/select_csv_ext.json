@@ -1,0 +1,20 @@
+{
+	"name": "select_csv_ext",
+	"properties": {
+		"folder": {
+			"name": "Serverless Pool SQL"
+		},
+		"content": {
+			"query": "SELECT TOP 10 *\nFROM OPENROWSET(\n    BULK 'https://pandemicdatalake.blob.core.windows.net/public/curated/covid-19/ecdc_cases/latest/ecdc_cases.csv',\n    FORMAT = 'csv',\n    PARSER_VERSION = '2.0',\n    HEADER_ROW = TRUE\n    --FIRSTROW = 2\n    ) AS [r]\nWHERE [countries_and_territories] = 'Brazil' order by [deaths] DESC",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "master",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

@@ -1,0 +1,20 @@
+{
+	"name": "CreateDimEmployee",
+	"properties": {
+		"folder": {
+			"name": "ps_dp203"
+		},
+		"content": {
+			"query": "CREATE TABLE [dbo].[DimEmployee](\n\n[EmployeeKey] [int] NOT NULL,\n\n[ParentEmployeeKey] [int] NULL,\n\n[EmployeeNationalIDAlternateKey] [nvarchar](15) NULL,\n\n[ParentEmployeeNationalIDAlternateKey] [nvarchar](15) NULL,\n\n[SalesTerritoryKey] [int] NULL,\n\n[FirstName] [nvarchar](50) NOT NULL,\n\n[LastName] [nvarchar](50) NOT NULL,\n\n[MiddleName] [nvarchar](50) NULL,\n\n[NameStyle] [bit] NOT NULL,\n\n[Title] [nvarchar](50) NULL,\n\n[HireDate] [date] NULL,\n\n[BirthDate] [date] NULL,\n\n[LoginID] [nvarchar](256) NULL,\n\n[EmailAddress] [nvarchar](50) NULL,\n\n[Phone] [nvarchar](25) NULL,\n\n[MaritalStatus] [nchar](1) NULL,\n\n[EmergencyContactName] [nvarchar](50) NULL,\n\n[EmergencyContactPhone] [nvarchar](25) NULL,\n\n[SalariedFlag] [bit] NULL,\n\n[Gender] [nchar](1) NULL,\n\n[PayFrequency] [tinyint] NULL,\n\n[BaseRate] [money] NULL,\n\n[VacationHours] [smallint] NULL,\n\n[SickLeaveHours] [smallint] NULL,\n\n[CurrentFlag] [bit] NOT NULL,\n\n[SalesPersonFlag] [bit] NOT NULL,\n\n[DepartmentName] [nvarchar](50) NULL,\n\n[StartDate] [date] NULL,\n\n[EndDate] [date] NULL,\n\n[Status] [nvarchar](50) NULL,\n\n[EmployeePhoto] [varbinary](max) NULL\n\n)\n\nWITH\n(\nDISTRIBUTION = REPLICATE,\n\nCLUSTERED INDEX (EmployeeKey)\n);\n\nGO",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "ps_dp203",
+				"poolName": "ps_dp203"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}

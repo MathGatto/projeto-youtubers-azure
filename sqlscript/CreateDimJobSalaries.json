@@ -1,0 +1,20 @@
+{
+	"name": "CreateDimJobSalaries",
+	"properties": {
+		"folder": {
+			"name": "ps_dp203"
+		},
+		"content": {
+			"query": "CREATE TABLE [dbo].[DimJobSalaries](\n\n[SalariesKey] [int] NOT NULL,\n\n[work_year] [int] NULL,\n\n[experience_level] [nvarchar](15) NULL,\n\n[employment_type] [nvarchar](15) NULL,\n\n[job_title] [nvarchar](50) NOT NULL,\n\n[salary] [int] NULL,\n\n[salary_currency] [nvarchar](15) NULL,\n\n[salary_in_usd] [int] NULL,\n\n[employee_residence] [nvarchar](15) NULL,\n\n[remote_ratio] [int] NULL,\n\n[company_location] [nvarchar](15) NULL,\n\n[company_size] [nvarchar](15) NULL\n\n)\n\nWITH\n(\nDISTRIBUTION = REPLICATE,\n\nCLUSTERED INDEX (SalariesKey)\n);\n\nGO",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "ps_dp203",
+				"poolName": "ps_dp203"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
