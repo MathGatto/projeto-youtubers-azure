@@ -30,9 +30,6 @@
 				},
 				{
 					"name": "RenomeiaPortugues"
-				},
-				{
-					"name": "FiltroAno2014"
 				}
 			],
 			"scriptLines": [
@@ -67,8 +64,7 @@
 				"     ),",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true) ~> RenomeiaPortugues",
-				"RenomeiaPortugues filter(AnoDeCriacao < 2014) ~> FiltroAno2014",
-				"FiltroAno2014 sink(allowSchemaDrift: true,",
+				"RenomeiaPortugues sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     partitionFileNames:['YoutubersDB_Final'],",
 				"     umask: 0022,",
